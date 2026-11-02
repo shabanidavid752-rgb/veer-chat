@@ -40,6 +40,9 @@ build-tools/
 *.tif
 *.tiff
 *.svg
+# VEER PWA icons are source assets — keep them
+!web/app/icons/*.png
+!app/assets/*.png
 *.mp4
 *.mov
 *.avi
