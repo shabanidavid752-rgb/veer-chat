@@ -22,7 +22,7 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.anonymous.veerchat"
+      "package": "com.veershabani.veerchat"
     },
     "web": {
       "favicon": "./assets/favicon.png",
