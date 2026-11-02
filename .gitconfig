@@ -1,3 +1,5 @@
 [user]
 	email = support@omni-coder.com
 	name = Omni Coder
+[safe]
+	directory = /data
