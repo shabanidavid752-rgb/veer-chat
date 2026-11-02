@@ -8,6 +8,13 @@ fastify.register(require("@fastify/cors"), { origin: true })
 
 fastify.register(require("@fastify/static"), { root: path.join(__dirname, "public") })
 
+// PWA build of the Expo app (veer chat) served under /app/
+fastify.register(require("@fastify/static"), {
+  root: path.join(__dirname, "app"),
+  prefix: "/app/",
+  decorateReply: false,
+})
+
 const WAITLIST_CSV = path.join(__dirname, "waitlist.csv")
 
 // Create the CSV with a header row on first boot

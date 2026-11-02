@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover" />
+    <title>VEER — Chat. Call. Share in HD</title>
+    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+        background: #121212;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+    <meta name="theme-color" content="#7CFF7A" />
+    <meta name="description" content="Modern chat app with 1-to-1 & 4-way group video calls and HD media sharing with zero compression." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="VEER" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" href="./favicon.ico" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <style>
+      /* Install overlay for browsers without native PWA install UI */
+      #veer-install {
+        position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 9999;
+        display: none; align-items: center; gap: 12px;
+        background: #1c1f1c; border: 1px solid #7CFF7A; border-radius: 16px;
+        padding: 12px 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+      #veer-install.show { display: flex; }
+      #veer-install .vi-icon {
+        width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+        background: #121212; border: 1.5px solid #7CFF7A;
+        display: flex; align-items: center; justify-content: center;
+        color: #7CFF7A; font-weight: 900; font-size: 18px;
+      }
+      #veer-install .vi-text { flex: 1; color: #f2f5f2; }
+      #veer-install .vi-text b { display: block; font-size: 14px; }
+      #veer-install .vi-text span { font-size: 12px; color: #8b918b; }
+      #veer-install button {
+        background: #7CFF7A; color: #0a2e09; border: none; border-radius: 10px;
+        font-weight: 800; font-size: 13px; padding: 10px 14px; cursor: pointer;
+      }
+      #veer-install .vi-x {
+        background: none; color: #8b918b; padding: 4px 8px; font-size: 16px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <!-- The root element for your Expo app. -->
+    <div id="root"></div>
+
+    <div id="veer-install">
+      <div class="vi-icon">V</div>
+      <div class="vi-text"><b>Install VEER</b><span>Add to your home screen — works offline</span></div>
+      <button id="vi-btn">Install</button>
+      <button id="vi-x" class="vi-x" aria-label="Dismiss">✕</button>
+    </div>
+
+    <script src="./_expo/static/js/web/index-1fd24484f5f6efe7adb67a849334c29a.js" defer></script>
+    <script>
+      // Service worker + install prompt
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+      }
+
+      (function () {
+        var bar = document.getElementById('veer-install');
+        var btn = document.getElementById('vi-btn');
+        var x = document.getElementById('vi-x');
+        var prompt = null;
+
+        function showBar() {
+          if (localStorage.getItem('veer-install-dismissed') === '1') return;
+          bar.classList.add('show');
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          prompt = e;
+          showBar();
+        });
+
+        btn.addEventListener('click', async () => {
+          if (prompt) {
+            prompt.prompt();
+            await prompt.userChoice;
+            prompt = null;
+            bar.classList.remove('show');
+          } else {
+            // No native prompt (e.g. iOS Safari) — show hint
+            bar.querySelector('.vi-text span').textContent = 'Share → "Add to Home Screen"';
+          }
+        });
+
+        x.addEventListener('click', () => {
+          localStorage.setItem('veer-install-dismissed', '1');
+          bar.classList.remove('show');
+        });
+
+        // If no beforeinstallprompt fires within 4s, show bar with hint (iOS path)
+        setTimeout(function () {
+          var standalone = window.matchMedia('(display-mode: standalone)').matches ||
+            window.navigator.standalone === true;
+          if (!standalone && !prompt) showBar();
+        }, 4000);
+      })();
+    </script>
+  </body>
+</html>
