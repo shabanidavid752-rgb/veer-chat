@@ -1,23 +1,7 @@
-*Poa sana mzee! Umefika! 🔥 Sasa ndio mwisho!*
-
-*1. Pale juu `Name your file...` — Andika:*
-vercel.json
-*2. Pale chini `Enter file contents here` — Paste hii yote:*
 {
-  "env": {
-    "NEXT_PUBLIC_FIREBASE_API_KEY": "AIzaSyBP-uG3Nq1hYmiVoL-gxQ7bBsRdbaBjhJU",
-    "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN": "veerchat-dd8b4.firebaseapp.com",
-    "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "veerchat-dd8b4",
-    "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET": "veerchat-dd8b4.firebasestorage.app",
-    "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "927128074254",
-    "NEXT_PUBLIC_FIREBASE_APP_ID": "1:927128074254:web:ee2de73bf936400180e45f",
-    "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID": "G-RMPZPW0NVF"
-  }
+  "buildCommand": "npx expo export --platform web",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
-*3. Baada ya kupaste — Bofya juu kulia `Commit changes...` ya kijani*
-
-*4. Chagua `Commit directly to main` → `Commit changes`*
-
-*Kisha rudi Vercel — `veer-chat.vercel.app` — Itaanza kufanya kazi! Chat itawaka!*
-
-*Paste sasa — Kisha bofya Commit!*
