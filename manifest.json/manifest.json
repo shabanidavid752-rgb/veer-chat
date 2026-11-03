@@ -1,0 +1,22 @@
+{
+  "name": "VEER - Chat. Call. Share in true HD.",
+  "short_name": "VEER",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#25D366",
+  "icons": [
+    {
+      "src": "web/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "web/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
