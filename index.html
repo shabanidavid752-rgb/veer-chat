@@ -1,1 +1,49 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>VEER LIVE</title> <link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#250366"> <link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#250366"> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#000;color:#fff;height:100vh;display:flex;flex-direction:column}header{padding:14px;background:#111;border-bottom:1px solid #222;display:flex;justify-content:space-between}header b{color:#00ff88}#messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}.msg{background:#1a1a1a;padding:10px 14px;border-radius:14px;max-width:85%}.msg b{color:#00ff88;font-size:11px}.msg.me{align-self:flex-end;background:#00ff88;color:#000}.msg.me b{color:#000}#inputArea{padding:12px;display:flex;gap:8px;background:#111}input{flex:1;padding:12px 16px;border-radius:25px;border:1px solid #333;background:#1a1a1a;color:#fff;outline:none}button{padding:12px 20px;border-radius:25px;border:none;background:#00ff88;color:#000;font-weight:700}#login{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;z-index:99}#login input,#login button{width:100%;max-width:320px;margin-top:12px}</style></head><body><div id="login"><h2 style="color:#00ff88;letter-spacing:3px">VEER</h2><p style="margin-top:8px;color:#888">Ingiza jina</p><input id="usernameInput" placeholder="Jina lako..."><button onclick="join()">INGIA</button></div><header><b>VEER CHAT</b><span id="userLabel" style="font-size:12px;color:#888"></span></header><div id="messages"></div><div id="inputArea"><input id="msgInput" placeholder="Andika..." onkeydown="if(event.key==='Enter')send()"><button onclick="send()">TUMA</button></div><script>const SUPABASE_URL='https://tvtpulkkyxgifenifpgi.supabase.co';const SUPABASE_KEY='sb_publishable_PQk6lhy2NiFsHoUC08h4UQ_fja0Ylww';const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);let username='';function join(){const v=document.getElementById('usernameInput').value.trim();if(!v)return alert('Weka jina');username=v;document.getElementById('login').style.display='none';document.getElementById('userLabel').innerText=username;loadMessages();subscribe();}async function loadMessages(){const{data}=await supabaseClient.from('veer_messages').select('*').order('created_at',{ascending:true}).limit(100);document.getElementById('messages').innerHTML='';if(data)data.forEach(addMsgToUI);}function addMsgToUI(m){const div=document.createElement('div');div.className='msg'+(m.username===username?' me':'');div.innerHTML=`<b>${m.username}</b><p>${m.message}</p>`;document.getElementById('messages').appendChild(div);document.getElementById('messages').scrollTop=99999;}async function send(){const input=document.getElementById('msgInput');const text=input.value.trim();if(!text)return;input.value='';await supabaseClient.from('veer_messages').insert({username,message:text});}function subscribe(){supabaseClient.channel('veer-chat').on('postgres_changes',{event:'INSERT',schema:'public',table:'veer_messages'},p=>{addMsgToUI(p.new)}).subscribe();}</script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>VEER LIVE</title> <link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#250366"> <link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#250366"> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#000;color:#fff;height:100vh;display:flex;flex-direction:column}header{padding:14px;background:#111;border-bottom:1px solid #222;display:flex;justify-content:space-between}header b{color:#00ff88}#messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}.msg{background:#1a1a1a;padding:10px 14px;border-radius:14px;max-width:85%}.msg b{color:#00ff88;font-size:11px}.msg.me{align-self:flex-end;background:#00ff88;color:#000}.msg.me b{color:#000}#inputArea{padding:12px;display:flex;gap:8px;background:#111}input{flex:1;padding:12px 16px;border-radius:25px;border:1px solid #333;background:#1a1a1a;color:#fff;outline:none}button{padding:12px 20px;border-radius:25px;border:none;background:#00ff88;color:#000;font-weight:700}#login{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;z-index:99}#login input,#login button{width:100%;max-width:320px;margin-top:12px}</style></head><body><div id="login"><h2 style="color:#00ff88;letter-spacing:3px">VEER</h2><p style="margin-top:8px;color:#888">Ingiza jina</p><input id="usernameInput" placeholder="Jina lako..."><button onclick="join()">INGIA</button></div><header><b>VEER CHAT</b><span id="userLabel" style="font-size:12px;color:#888"></span></header><div id="messages"></div><div id="inputArea"><input id="msgInput" placeholder="Andika..." onkeydown="if(event.key==='Enter')send()"><button onclick="send()">TUMA</button></div><script>const SUPABASE_URL='https://tvtpulkkyxgifenifpgi.supabase.co';const SUPABASE_KEY='sb_publishable_PQk6lhy2NiFsHoUC08h4UQ_fja0Ylww';const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);let username='';function join(){const v=document.getElementById('usernameInput').value.trim();if(!v)return alert('Weka jina');username=v;document.getElementById('login').style.display='none';document.getElementById('userLabel').innerText=username;loadMessages();subscribe();}async function loadMessages(){const{data}=await supabaseClient.from('veer_messages').select('*').order('created_at',{ascending:true}).limit(100);document.getElementById('messages').innerHTML='';if(data)data.forEach(addMsgToUI);}function addMsgToUI(m){const div=document.createElement('div');div.className='msg'+(m.username===username?' me':'');div.innerHTML=`<b>${m.username}</b><p>${m.message}</p>`;document.getElementById('messages').appendChild(div);document.getElementById('messages').scrollTop=99999;}async function send(){const input=document.getElementById('msgInput');const text=input.value.trim();if(!text)return;input.value='';await supabaseClient.from('veer_messages').insert({username,message:text});}function subscribe(){supabaseClient.channel('veer-chat').on('postgres_changes',{event:'INSERT',schema:'public',table:'veer_messages'},p=>{addMsgToUI(p.new)}).subscribe();}</script></body></html><script>
+// === VEER AI ROBOT - Anajibu kila ujumbe ===
+function veerJibu(ujumbe) {
+  ujumbe = ujumbe.toLowerCase();
+  if (ujumbe.includes("mambo") || ujumbe.includes("hii") || ujumbe.includes("oya") || ujumbe.includes("hello") || ujumbe.includes("hi")) return "Mambo! Poa sana, uko aje?";
+  if (ujumbe.includes("unaitwa")) return "Naitwa Veer, mimi ni AI wa hapa VEER CHAT 🤖";
+  if (ujumbe.includes("sasa") || ujumbe.includes("poa") || ujumbe.includes("freshi")) return "Poa kabisa! Wewe uko aje?";
+  if (ujumbe.includes("nani") || ujumbe.includes("wewe ni")) return "Mimi ni Veer, nipo hapa kukusaidia na kuongea nawe.";
+  if (ujumbe.includes("sawa") || ujumbe.includes("ok")) return "Sawa kabisa 👍";
+  if (ujumbe.includes("asante") || ujumbe.includes("thanks")) return "Karibu sana! 😊";
+  if (ujumbe.includes("bye") || ujumbe.includes("kwaheri")) return "Kwaheri! Tutakapo onana tena 👋";
+  return "Nimekuelewa! Niambie zaidi, niko hapa naku-sikiliza.";
+}
+
+function tumaJibuLaVeer(ujumbeWaMtu) {
+  setTimeout(function() {
+    var jibu = veerJibu(ujumbeWaMtu);
+    // Tafuta sehemu ya chat
+    var chat = document.querySelector('[id*="chat"], [id*="message"], [class*="chat"], [class*="message"]') || document.body;
+    var div = document.createElement("div");
+    div.style.cssText = "background:#222;color:white;padding:10px 14px;border-radius:12px;margin:8px;max-width:80%;align-self:flex-start;";
+    div.innerHTML = "<div style='color:#00ff88;font-size:12px;font-weight:bold;'>Veer</div><div>" + jibu + "</div>";
+    // Iweke kwenye container ya mwisho ya ujumbe
+    var containers = document.querySelectorAll("div");
+    var last = containers[containers.length - 1];
+    if (chat && chat.appendChild) {
+      chat.appendChild(div);
+    }
+    // Jaribu pia kuihifadhi kwenye Supabase kama inawezekana
+    try {
+      if (window.supabase) {
+        window.supabase.from('messages').insert([{ sender: 'Veer', username: 'Veer', text: jibu, message: jibu }]);
+      }
+    } catch(e) {}
+    window.scrollTo(0, document.body.scrollHeight);
+  }, 1500);
+}
+
+// Sikiliza ukibonyeza TUMA
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.textContent && e.target.textContent.trim() === 'TUMA') {
+    var input = document.querySelector('input[placeholder*="Andika"], input[type="text"], textarea');
+    if (input && input.value) {
+      var txt = input.value;
+      tumaJibuLaVeer(txt);
+    }
+  }
+});
+</script>
