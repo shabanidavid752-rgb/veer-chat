@@ -9,7 +9,6 @@
 body{background:#ece5dd}
 .header{background:#075E54;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
 .header h1{font-size:22px}
-.header span{font-size:20px}
 .search{background:#fff;margin:8px;padding:10px;border-radius:20px;color:#888;font-size:14px}
 .chat-list{background:#fff}
 .chat{display:flex;align-items:center;padding:12px;border-bottom:1px solid #eee;cursor:pointer}
@@ -19,7 +18,6 @@ body{background:#ece5dd}
 .info b{font-size:16px}
 .info p{font-size:13px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .time{font-size:11px;color:#25D366;text-align:right}
-.badge{background:#25D366;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:4px;float:right}
 .chat-view{display:none;flex-direction:column;height:100vh}
 .chat-head{background:#075E54;color:#fff;padding:12px;display:flex;align-items:center;gap:10px}
 .chat-head small{color:#d4f8c5}
@@ -35,40 +33,21 @@ body{background:#ece5dd}
 </style>
 </head>
 <body>
-
 <div id="listView">
-  <div class="header"><h1>VEER</h1><span>🔍 ⋮</span></div>
-  <div class="search">🔍 Tafuta chat...</div>
-  <div class="chat-list">
-    <div class="chat" onclick="openChat('VEER AI','ai')">
-      <div class="avatar ai">V</div>
-      <div class="info"><b>VEER AI ✅</b><p id="last-ai">Mambo! Niko hapa, niambie...</p></div>
-      <div><div class="time">Sasa</div><div class="badge">1</div></div>
-    </div>
-    <div class="chat" onclick="openChat('General','general')">
-      <div class="avatar" style="background:#128C7E">G</div>
-      <div class="info"><b>General</b><p>Chat ya wote...</p></div>
-      <div><div class="time">Sasa</div></div>
-    </div>
-    <div class="chat" onclick="openChat('Marafiki','marafiki')">
-      <div class="avatar" style="background:#FF9800">M</div>
-      <div class="info"><b>Marafiki</b><p>Tuongee hapa...</p></div>
-      <div><div class="time">Sasa</div></div>
-    </div>
-    <div class="chat" onclick="openChat('Familia','familia')">
-      <div class="avatar" style="background:#E91E63">F</div>
-      <div class="info"><b>Familia</b><p>Habari za nyumbani...</p></div>
-      <div><div class="time">Sasa</div></div>
-    </div>
-  </div>
+<div class="header"><h1>VEER</h1><span>🔍 ⋮</span></div>
+<div class="search">🔍 Tafuta chat...</div>
+<div class="chat-list">
+<div class="chat" onclick="openChat('VEER AI','ai')"><div class="avatar ai">V</div><div class="info"><b>VEER AI ✅</b><p id="last-ai">Mambo! Niko hapa...</p></div><div><div class="time">Sasa</div></div></div>
+<div class="chat" onclick="openChat('General','general')"><div class="avatar" style="background:#128C7E">G</div><div class="info"><b>General</b><p>Chat ya wote...</p></div><div><div class="time">Sasa</div></div></div>
+<div class="chat" onclick="openChat('Marafiki','marafiki')"><div class="avatar" style="background:#FF9800">M</div><div class="info"><b>Marafiki</b><p>Tuongee hapa...</p></div><div><div class="time">Sasa</div></div></div>
+<div class="chat" onclick="openChat('Familia','familia')"><div class="avatar" style="background:#E91E63">F</div><div class="info"><b>Familia</b><p>Habari za nyumbani...</p></div><div><div class="time">Sasa</div></div></div>
 </div>
-
+</div>
 <div id="chatView" class="chat-view">
-  <div class="chat-head"><span class="back" onclick="goBack()">←</span><div class="avatar ai" id="headAv">V</div><div><b id="headName">VEER AI</b><br><small id="headStatus">online</small></div></div>
-  <div class="msgs" id="msgs"></div>
-  <div class="input"><input id="inp" placeholder="Andika ujumbe..."><button onclick="send()">➤</button></div>
+<div class="chat-head"><span class="back" onclick="goBack()">←</span><div class="avatar ai">V</div><div><b id="headName">VEER AI</b><br><small id="headStatus">online</small></div></div>
+<div class="msgs" id="msgs"></div>
+<div class="input"><input id="inp" placeholder="Andika ujumbe..."><button onclick="send()">➤</button></div>
 </div>
-
 <script>
 let current='ai';
 let chats={ai:[{t:'Mambo! Niko hapa, niambie unataka nini? 😊',me:false,ai:true}],general:[],marafiki:[],familia:[]};
@@ -98,52 +77,31 @@ function send(){
   chats[current].push({t:txt,me:true}); inp.value=''; render();
   if(current==='ai'){
     setTimeout(()=>{
-      chats.ai.push({t:aiReply(txt),me:false,ai:true});
-      document.getElementById('last-ai').innerText=aiReply(txt);
+      let r = aiReply(txt);
+      chats.ai.push({t:r,me:false,ai:true});
+      document.getElementById('last-ai').innerText=r;
       render();
     },800);
   }
 }
 function aiReply(txt){
   let t = txt.toLowerCase();
-  // Lugha - English
-  if(t.includes('hello')||t.includes('hi')||t.includes('how are you')) return 'Hello! I am fine, how about you? 😊 I can speak English and Swahili. What do you want to talk about?';
+  if(t.includes('hello')||t.includes('how are you')) return 'Hello! I am fine, how about you? 😊 I can speak English and Swahili.';
   if(t.includes('what is your name')) return 'My name is VEER AI. I am your friend here in VEER!';
-  if(t.includes('what is')||t.includes('what are')) return 'Good question! Tell me what you want to know - for example, ask me about philosophy, science, or history.';
-  
-  // Falsafa
-  if(t.includes('falsafa')||t.includes('philosophy')) return 'Falsafa ni sayansi ya kufikiri kuhusu maisha, ukweli, na busara. Mfano: Socrates alisema "Najua kwamba sijui chochote" - maana yake mtu mwerevu ndiye anayejua bado anajifunza. Unataka nikueleze falsafa ya nini? Maisha, upendo, au Mungu?';
-  if(t.includes('maana ya maisha')||t.includes('meaning of life')) return 'Wanafalsafa wanasema maana ya maisha ni tofauti kwa kila mtu. Wengine wanasema ni kutafuta furaha, wengine kusaidia wengine, wengine kujifunza. Wewe unafikiri maana ya maisha ni nini?';
-  
-  // Sayansi / Historia
-  if(t.includes('sayansi')||t.includes('science')) return 'Sayansi ni kujifunza dunia kwa majaribio. Mfano: Jua liko mbali kilomita milioni 150 na mwanga wake unachukua dakika 8 kufika hapa! Unataka nikueleze sayansi ya nini?';
-  if(t.includes('historia')||t.includes('history')) return 'Historia ni hadithi ya zamani. Mfano: Tanzania ilipata uhuru 9 Desemba 1961, na Mwalimu Nyerere alikuwa Rais wa kwanza. Unataka historia ya nini?';
-  if(t.includes('hesabu')||t.includes('math')||t.includes('2+2')||t.includes('2 + 2')) return 'Hesabu ni rahisi! Mfano: 2+2 = 4. Niambie hesabu yoyote unayotaka nikusaidie - kama 12x8 au 100/5.';
-  
-  // Mpira / Muziki
-  if(t.includes('mpira')||t.includes('football')||t.includes('simba')||t.includes('yanga')) return 'Mpira! 🔥 Wewe ni Simba au Yanga? Mimi napenda mpira sana. Timu gani unaiunga mkono?';
-  if(t.includes('muziki')||t.includes('nyimbo')||t.includes('music')) return 'Muziki ni dawa ya moyo! 🎵 Unapenda Bongo Flava, Amapiano, au Gospel? Nikuimbie wimbo?';
-  if(t.includes('mapenzi')||t.includes('love')||t.includes('penzi')) return 'Mapenzi... ❤️ Mapenzi ya kweli ni kuheshimiana na kuaminiana. Unampenda mtu? Niambie, nitakushauri.';
-  
-  // Mambo ya kawaida
+  if(t.includes('falsafa')||t.includes('philosophy')) return 'Falsafa ni sayansi ya kufikiri kuhusu maisha, ukweli, na busara. Mfano: Socrates alisema "Najua kwamba sijui chochote" - mtu mwerevu ndiye anayejua bado anajifunza. Unataka nikueleze falsafa ya nini? Maisha, upendo, au Mungu?';
+  if(t.includes('maana ya maisha')) return 'Maana ya maisha ni tofauti kwa kila mtu. Wengine wanasema ni kutafuta furaha, wengine kusaidia wengine. Wewe unafikiri ni nini?';
+  if(t.includes('sayansi')||t.includes('science')) return 'Sayansi ni kujifunza dunia kwa majaribio. Mfano: Jua liko mbali km milioni 150 na mwanga wake unachukua dakika 8 kufika hapa! Unataka nikueleze sayansi ya nini?';
+  if(t.includes('historia')||t.includes('history')) return 'Historia ni hadithi ya zamani. Mfano: Tanzania ilipata uhuru 9 Desemba 1961, na Mwalimu Nyerere alikuwa Rais wa kwanza.';
+  if(t.includes('hesabu')||t.includes('math')||t.includes('2+2')) return 'Hesabu ni rahisi! Mfano: 2+2 = 4. Niambie hesabu yoyote unayotaka nikusaidie.';
+  if(t.includes('mpira')||t.includes('simba')||t.includes('yanga')) return 'Mpira! 🔥 Wewe ni Simba au Yanga? Timu gani unaiunga mkono?';
+  if(t.includes('muziki')||t.includes('music')) return 'Muziki ni dawa ya moyo! 🎵 Unapenda Bongo Flava, Amapiano, au Gospel?';
+  if(t.includes('mapenzi')||t.includes('love')) return 'Mapenzi ya kweli ni kuheshimiana na kuaminiana. ❤️ Unampenda mtu? Niambie, nitakushauri.';
   if(t.includes('mambo')||t.includes('habari')||t.includes('vipi')) return 'Poa sana! Mimi niko vizuri kabisa. Wewe uko aje leo?';
   if(t.includes('jina')) return 'Mimi ni VEER AI, rafiki yako wa hapa VEER. Wewe unaitwa nani?';
-  if(t.includes('nini unafanya')||t.includes('unafanya nini')) return 'Niko hapa nakuongojea wewe tu! 😊 Unataka tuongee kuhusu nini leo?';
-  if(t.includes('asante')||t.includes('thank')) return 'Karibu sana! ❤️ Niko hapa muda wote kukusaidia.';
-  if(t.includes('bye')||t.includes('kwaheri')||t.includes('lala')) return 'Kwaheri! Usisahau kurudi, nitakumiss! 👋';
-  if(t.includes('sawa')||t.includes('poa')||t.includes('ok')) return 'Sawa kabisa! 😄 Sasa tuongee kuhusu nini? Unaweza kuniuliza kuhusu Falsafa, Sayansi, Historia, Mpira, Muziki...';
-  
-  return 'Swali zuri! Mimi bado najifunza. Lakini naweza kukuambia kuhusu: Falsafa, Sayansi, Historia, Hesabu, Mpira, Muziki, Mapenzi. Jaribu kuniuliza mojawapo! 😊';
-}
-  txt=txt.toLowerCase();
-  if(txt.includes('mambo')||txt.includes('habari')) return 'Poa sana! Mimi niko vizuri. Wewe uko aje? 😊';
-  if(txt.includes('jina')) return 'Mimi ni VEER AI, rafiki yako wa hapa VEER. Niko hapa kukusaidia na kuongea na wewe!';
-  if(txt.includes('nini')&&txt.includes('fanya')) return 'Naweza kuongea na wewe, kukupa mawazo, kukusaidia kuandika ujumbe, na kukupa habari. Niambie unataka nini?';
-  if(txt.includes('sawa')||txt.includes('poa')) return 'Sawa kabisa! 😄 Unataka tuongee kuhusu nini sasa?';
-  if(txt.includes('asante')) return 'Karibu sana! Niko hapa muda wote. ❤️';
-  if(txt.includes('bye')||txt.includes('kwaheri')) return 'Kwaheri! Usisahau kurudi, nitakumiss! 👋';
-  if(txt.includes('mchezo')||txt.includes('cheza')) return 'Sawa tucheze! Niambie namba 1 hadi 10, nikubashirie uliyochagua 😄';
-  return 'Nimekuelewa! Niambie zaidi kidogo, nataka nikusaidie vizuri. Unataka tuongee kuhusu nini?';
+  if(t.includes('asante')||t.includes('thank')) return 'Karibu sana! ❤️ Niko hapa muda wote.';
+  if(t.includes('bye')||t.includes('kwaheri')) return 'Kwaheri! Usisahau kurudi, nitakumiss! 👋';
+  if(t.includes('sawa')||t.includes('poa')||t.includes('ok')) return 'Sawa kabisa! 😄 Tuongee kuhusu nini? Unaweza kuniuliza Falsafa, Sayansi, Historia, Mpira, Muziki...';
+  return 'Swali zuri! Naweza kukuambia kuhusu: Falsafa, Sayansi, Historia, Hesabu, Mpira, Muziki, Mapenzi. Jaribu kuniuliza mojawapo! 😊';
 }
 document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter') send()});
 </script>
