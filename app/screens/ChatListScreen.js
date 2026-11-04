@@ -3,13 +3,13 @@ import React, { useMemo, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import Avatar from '../components/Avatar';
 import { CONTACTS } from '../data/contacts';
-
-export default function ChatListScreen({ userName, onOpenVideo, onOpenGroup, onOpenMedia }) {
+export default function ChatListScreen({ userName, onOpenChat, onOpenGroup, onOpenMedia }) {
+export default function ChatListScreen({ userName, onOpenChat, onOpenGroup, onOpenMedia }) {
   const [query, setQuery] = useState('');
   const [tab, setTab] = useState('All');
 
   const chats = useMemo(() => {
-    let list = CONTACTS;
+    let list = [...CONTACTS];
     if (tab === 'Unread') list = list.filter((c) => c.unread > 0);
     if (tab === 'Groups') list = list.filter((c) => c.phone.startsWith('group'));
     if (query.trim()) {
@@ -22,7 +22,8 @@ export default function ChatListScreen({ userName, onOpenVideo, onOpenGroup, onO
   const renderItem = ({ item }) => (
     <Pressable
       style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
-      onPress={() => (item.phone.startsWith('group') ? onOpenGroup(item) : onOpenVideo(item))}
+      onPress={() => item.phone.startsWith('group') ? onOpenGroup(item) : onOpenChat(item)}
+    >
     >
       <Avatar name={item.name} size={52} online={item.online} />
       <View style={styles.rowMain}>
