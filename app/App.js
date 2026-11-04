@@ -7,7 +7,7 @@ import MediaScreen from './screens/MediaScreen';
 import SignupScreen from './screens/SignupScreen';
 import VideoCallScreen from './screens/VideoCallScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
-
+import SettingsScreen from './screens/SettingsScreen';
 // Simple state-driven routing — swap for expo-router when the app grows.
 export default function App() {
   const [route, setRoute] = useState('welcome'); // welcome | signup | chats | call | group | media
@@ -42,14 +42,15 @@ export default function App() {
         userName={userName || 'there'}
         onOpenVideo={openVideo}
         onOpenGroup={openGroup}
-        onOpenMedia={() => setRoute('media')}
+        onOpenMedia={() => setRoute('media')}onOpenSettings={() => setRoute('settings')}
       />
     );
   } else if (route === 'call') {
     screen = <VideoCallScreen contact={activeContact} onEnd={() => setRoute('chats')} />;
   } else if (route === 'group') {
     screen = <GroupCallScreen group={activeContact} onEnd={() => setRoute('chats')} />;
-  } else {
+  } else if (route === 'settings') {
+  screen = <SettingsScreen onBack={() => setRoute('chats')} />;} else {
     screen = <MediaScreen onBack={() => setRoute('chats')} />;
   }
 
