@@ -9,7 +9,6 @@
 body{background:#ece5dd}
 .header{background:#075E54;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
 .header h1{font-size:22px}
-.search{background:#fff;margin:8px;padding:10px;border-radius:20px;color:#888;font-size:14px}
 .chat-list{background:#fff}
 .chat{display:flex;align-items:center;padding:12px;border-bottom:1px solid #eee;cursor:pointer}
 .avatar{width:48px;height:48px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;flex-shrink:0}
@@ -17,14 +16,12 @@ body{background:#ece5dd}
 .info{flex:1;margin-left:12px;overflow:hidden}
 .info b{font-size:16px}
 .info p{font-size:13px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.time{font-size:11px;color:#25D366;text-align:right}
 .chat-view{display:none;flex-direction:column;height:100vh}
 .chat-head{background:#075E54;color:#fff;padding:12px;display:flex;align-items:center;gap:10px}
 .chat-head small{color:#d4f8c5}
 .msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#ece5dd}
-.msg{max-width:75%;padding:8px 10px;border-radius:8px;font-size:15px}
+.msg{max-width:80%;padding:8px 10px;border-radius:8px;font-size:15px;white-space:pre-wrap}
 .me{background:#dcf8c6;align-self:flex-end}
-.other{background:#fff;align-self:flex-start}
 .ai-msg{background:#fff;align-self:flex-start;border-left:3px solid #075E54}
 .input{display:flex;padding:8px;background:#f0f0f0;gap:8px}
 .input input{flex:1;padding:12px;border-radius:25px;border:none;outline:none}
@@ -35,28 +32,26 @@ body{background:#ece5dd}
 <body>
 <div id="listView">
 <div class="header"><h1>VEER</h1><span>🔍 ⋮</span></div>
-<div class="search">🔍 Tafuta chat...</div>
 <div class="chat-list">
-<div class="chat" onclick="openChat('VEER AI','ai')"><div class="avatar ai">V</div><div class="info"><b>VEER AI ✅</b><p id="last-ai">Mambo! Niko hapa...</p></div><div><div class="time">Sasa</div></div></div>
-<div class="chat" onclick="openChat('General','general')"><div class="avatar" style="background:#128C7E">G</div><div class="info"><b>General</b><p>Chat ya wote...</p></div><div><div class="time">Sasa</div></div></div>
-<div class="chat" onclick="openChat('Marafiki','marafiki')"><div class="avatar" style="background:#FF9800">M</div><div class="info"><b>Marafiki</b><p>Tuongee hapa...</p></div><div><div class="time">Sasa</div></div></div>
-<div class="chat" onclick="openChat('Familia','familia')"><div class="avatar" style="background:#E91E63">F</div><div class="info"><b>Familia</b><p>Habari za nyumbani...</p></div><div><div class="time">Sasa</div></div></div>
+<div class="chat" onclick="openChat('VEER AI','ai')"><div class="avatar ai">V</div><div class="info"><b>VEER AI ✅</b><p id="last-ai">Mambo! Uliza chochote...</p></div></div>
+<div class="chat" onclick="openChat('General','general')"><div class="avatar" style="background:#128C7E">G</div><div class="info"><b>General</b><p>Chat ya wote...</p></div></div>
+<div class="chat" onclick="openChat('Marafiki','marafiki')"><div class="avatar" style="background:#FF9800">M</div><div class="info"><b>Marafiki</b><p>Tuongee hapa...</p></div></div>
 </div>
 </div>
 <div id="chatView" class="chat-view">
-<div class="chat-head"><span class="back" onclick="goBack()">←</span><div class="avatar ai">V</div><div><b id="headName">VEER AI</b><br><small id="headStatus">online</small></div></div>
+<div class="chat-head"><span class="back" onclick="goBack()">←</span><div class="avatar ai">V</div><div><b id="headName">VEER AI</b><br><small id="headStatus">online - AI wa kweli</small></div></div>
 <div class="msgs" id="msgs"></div>
-<div class="input"><input id="inp" placeholder="Andika ujumbe..."><button onclick="send()">➤</button></div>
+<div class="input"><input id="inp" placeholder="Uliza chochote..."><button onclick="send()">➤</button></div>
 </div>
 <script>
+const API_KEY = "WEKA_API_KEY_YAKO_HAPA";
 let current='ai';
-let chats={ai:[{t:'Mambo! Niko hapa, niambie unataka nini? 😊',me:false,ai:true}],general:[],marafiki:[],familia:[]};
+let chats={ai:[{t:'Mambo! Mimi ni VEER AI wa kweli sasa. Uliza chochote - Statistics, Falsafa, Curriculum ya nchi yoyote...',me:false,ai:true}],general:[],marafiki:[]};
 function openChat(name,key){
   current=key;
   document.getElementById('listView').style.display='none';
   document.getElementById('chatView').style.display='flex';
   document.getElementById('headName').innerText=name;
-  document.getElementById('headStatus').innerText = key==='ai' ? 'online - anajibu sasa hivi' : 'Watu 3 wapo';
   render();
 }
 function goBack(){
@@ -67,41 +62,40 @@ function render(){
   let box=document.getElementById('msgs'); box.innerHTML='';
   chats[current].forEach(m=>{
     let d=document.createElement('div');
-    d.className='msg '+(m.me?'me':(m.ai?'ai-msg':'other'));
+    d.className='msg '+(m.me?'me':'ai-msg');
     d.innerText=m.t; box.appendChild(d);
   });
   box.scrollTop=box.scrollHeight;
 }
-function send(){
+async function send(){
   let inp=document.getElementById('inp'); let txt=inp.value.trim(); if(!txt) return;
   chats[current].push({t:txt,me:true}); inp.value=''; render();
-  if(current==='ai'){
-    setTimeout(()=>{
-      let r = aiReply(txt);
-      chats.ai.push({t:r,me:false,ai:true});
-      document.getElementById('last-ai').innerText=r;
-      render();
-    },800);
-  }
+  if(current!=='ai') return;
+  chats.ai.push({t:'VEER AI anaandika...',me:false,ai:true}); render();
+  let answer = await askGemini(txt);
+  chats.ai[chats.ai.length-1].t = answer;
+  document.getElementById('last-ai').innerText=answer;
+  render();
 }
-function aiReply(txt){
-  let t = txt.toLowerCase();
-  if(t.includes('hello')||t.includes('how are you')) return 'Hello! I am fine, how about you? 😊 I can speak English and Swahili.';
-  if(t.includes('what is your name')) return 'My name is VEER AI. I am your friend here in VEER!';
-  if(t.includes('falsafa')||t.includes('philosophy')) return 'Falsafa ni sayansi ya kufikiri kuhusu maisha, ukweli, na busara. Mfano: Socrates alisema "Najua kwamba sijui chochote" - mtu mwerevu ndiye anayejua bado anajifunza. Unataka nikueleze falsafa ya nini? Maisha, upendo, au Mungu?';
-  if(t.includes('maana ya maisha')) return 'Maana ya maisha ni tofauti kwa kila mtu. Wengine wanasema ni kutafuta furaha, wengine kusaidia wengine. Wewe unafikiri ni nini?';
-  if(t.includes('sayansi')||t.includes('science')) return 'Sayansi ni kujifunza dunia kwa majaribio. Mfano: Jua liko mbali km milioni 150 na mwanga wake unachukua dakika 8 kufika hapa! Unataka nikueleze sayansi ya nini?';
-  if(t.includes('historia')||t.includes('history')) return 'Historia ni hadithi ya zamani. Mfano: Tanzania ilipata uhuru 9 Desemba 1961, na Mwalimu Nyerere alikuwa Rais wa kwanza.';
-  if(t.includes('hesabu')||t.includes('math')||t.includes('2+2')) return 'Hesabu ni rahisi! Mfano: 2+2 = 4. Niambie hesabu yoyote unayotaka nikusaidie.';
-  if(t.includes('mpira')||t.includes('simba')||t.includes('yanga')) return 'Mpira! 🔥 Wewe ni Simba au Yanga? Timu gani unaiunga mkono?';
-  if(t.includes('muziki')||t.includes('music')) return 'Muziki ni dawa ya moyo! 🎵 Unapenda Bongo Flava, Amapiano, au Gospel?';
-  if(t.includes('mapenzi')||t.includes('love')) return 'Mapenzi ya kweli ni kuheshimiana na kuaminiana. ❤️ Unampenda mtu? Niambie, nitakushauri.';
-  if(t.includes('mambo')||t.includes('habari')||t.includes('vipi')) return 'Poa sana! Mimi niko vizuri kabisa. Wewe uko aje leo?';
-  if(t.includes('jina')) return 'Mimi ni VEER AI, rafiki yako wa hapa VEER. Wewe unaitwa nani?';
-  if(t.includes('asante')||t.includes('thank')) return 'Karibu sana! ❤️ Niko hapa muda wote.';
-  if(t.includes('bye')||t.includes('kwaheri')) return 'Kwaheri! Usisahau kurudi, nitakumiss! 👋';
-  if(t.includes('sawa')||t.includes('poa')||t.includes('ok')) return 'Sawa kabisa! 😄 Tuongee kuhusu nini? Unaweza kuniuliza Falsafa, Sayansi, Historia, Mpira, Muziki...';
-  return 'Swali zuri! Naweza kukuambia kuhusu: Falsafa, Sayansi, Historia, Hesabu, Mpira, Muziki, Mapenzi. Jaribu kuniuliza mojawapo! 😊';
+async function askGemini(question){
+  if(!API_KEY || API_KEY==="AQ.Ab8RN6JpR9Kg4is3zXqqk7Yffviw8Knafy_tqdZrXePSz1qBdQ
+    return 'Bado hujaweka API Key. Nenda Google AI Studio, chukua key, uibandike kwenye code pale palipoandikwa WEKA_API_KEY_YAKO_HAPA.';
+  }
+  try{
+    let res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key='+API_KEY,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({contents:[{parts:[{text:'Jibu kwa Kiswahili rahisi, kifupi na wazi. Kama swali ni la Kiingereza jibu kwa Kiingereza. Swali: '+question}]}]})
+    });
+    let data = await res.json();
+    if(data.candidates && data.candidates[0].content.parts[0].text){
+      return data.candidates[0].content.parts[0].text;
+    } else {
+      return 'Pole, Gemini ameshindwa kujibu sasa. Jaribu tena baada ya sekunde chache.';
+    }
+  }catch(e){
+    return 'Pole, kuna tatizo la mtandao. Hakikisha una internet na API Key iko sahihi. Jaribu tena.';
+  }
 }
 document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter') send()});
 </script>
