@@ -1,38 +1,32 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-body{margin:0;font-family:sans-serif;background:#f5efe6}
-.top{background:#0a5c36;color:#fff;padding:15px;font-size:22px;font-weight:bold}
-.chat{background:#fff;padding:15px;border-bottom:1px solid #ddd;display:flex;gap:12px;cursor:pointer}
-.av{width:50px;height:50px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold}
+body{margin:0;font-family:sans-serif;background:#fff8e7}
+.top{background:#0a5c36;color:#fff;padding:14px;font-size:22px;font-weight:bold}
+.chat{padding:14px;border-bottom:1px solid #eee;display:flex;gap:12px;cursor:pointer}
+.av{width:50px;height:50px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:bold}
 #chatView{display:none;flex-direction:column;height:100vh}
-.head{background:#0a5c36;color:#fff;padding:12px;display:flex;gap:10px;align-items:center}
+#head{padding:12px;background:#0a5c36;color:#fff;font-weight:bold}
 #msgs{flex:1;overflow:auto;padding:10px}
-.b{padding:8px 12px;border-radius:12px;margin:5px;max-width:80%}
+#inp{display:flex;padding:8px;gap:6px}
+#inp input{flex:1;padding:12px;border-radius:20px;border:1px solid #ccc}
+#inp button{padding:12px 16px;border-radius:20px;background:#0a5c36;color:#fff;border:none}
+.msg{margin:6px 0;padding:10px;border-radius:12px;background:#fff;max-width:85%}
 .me{background:#dcf8c6;margin-left:auto}
-.ai{background:#fff}
-.inp{display:flex;padding:8px;background:#fff}
-.inp input{flex:1;padding:10px}
-</style>
-</head>
-<body>
+</style></head><body>
 <div id="listView">
 <div class="top">VEER</div>
-<div class="chat" id="c1"><div class="av" style="background:#0a5c36">V</div><div><b>VEER AI ✅</b><br>Things! Ask anything...</div></div>
-<div class="chat" id="c2"><div class="av" style="background:#0a8a5c">G</div><div><b>General</b><br>Everyone's chat...</div></div>
-<div class="chat" id="c3"><div class="av" style="background:#f0a020">M</div><div><b>Friends</b><br>Let's talk here...</div></div>
+<div class="chat" onclick="showChat('VEER AI','ai')"><div class="av" style="background:#0a5c36">V</div><div><b>VEER AI ✅</b><br>Things! Ask anything...</div></div>
+<div class="chat" onclick="showChat('General','general')"><div class="av" style="background:#22a55b">G</div><div><b>General</b><br>Everyone's chat...</div></div>
+<div class="chat" onclick="showChat('Friends','friends')"><div class="av" style="background:#f59e0b">M</div><div><b>Friends</b><br>Let's talk here...</div></div>
 </div>
-
 <div id="chatView">
-<div class="head"><span id="back" style="font-size:24px;cursor:pointer">←</span><b id="headName">VEER AI</b></div>
+<div id="head"><span onclick="goBack()" style="cursor:pointer">← </span><span id="headName"></span></div>
 <div id="msgs"></div>
-<div class="inp"><input id="txt" placeholder="Type message..."><button id="sendBtn">Send</button></div>
+<div id="inp"><input id="txt" placeholder="Type message..."><button onclick="send()">Send</button></div>
 </div>
-
 <script>
-var API_KEY=AQ.Ab8RN6JtF6hBzzWEnip_hCWrFDf5zpMmvRZntViOAbAe7PX58Q
+var API_KEY=AQ.Ab8RN6K9my-EiOnuTcnmbXQFS81ETx2IAckEVz1RWZT6o9akIQ
 var current="ai";
 var chats={ai:[],general:[],friends:[]};
 function showChat(name,key){
@@ -42,20 +36,16 @@ document.getElementById("chatView").style.display="flex";
 document.getElementById("headName").innerText=name;
 render();
 }
-document.getElementById("c1").onclick=function(){showChat("VEER AI","ai")};
-document.getElementById("c2").onclick=function(){showChat("General","general")};
-document.getElementById("c3").onclick=function(){showChat("Friends","friends")};
-document.getElementById("back").onclick=function(){
+function goBack(){
 document.getElementById("chatView").style.display="none";
 document.getElementById("listView").style.display="block";
-};
+}
 function render(){
-var m=document.getElementById("msgs");
-m.innerHTML="";
+var m=document.getElementById("msgs");m.innerHTML="";
 for(var i=0;i<chats[current].length;i++){
 var d=document.createElement("div");
-d.className="b "+chats[current][i].c;
-d.innerText=chats[current][i].t;
+d.className="msg "+(chats[current][i].c=="me"?"me":"");
+d.innerText=(chats[current][i].c=="me"?"You: ":"")+chats[current][i].t;
 m.appendChild(d);
 }
 m.scrollTop=m.scrollHeight;
@@ -63,22 +53,14 @@ m.scrollTop=m.scrollHeight;
 async function send(){
 var t=document.getElementById("txt");
 if(!t.value) return;
-var q=t.value; t.value="";
-chats[current].push({c:"me",t:q}); render();
-if(current==="ai"){
+var q=t.value;t.value="";
+chats[current].push({c:"me",t:q});render();
+if(current!="ai"){return;}
 try{
-var r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+API_KEY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:q}]}]})});
+var r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+API_KEY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:q}]}]})});
 var j=await r.json();
-var a=j.candidates[0].content.parts[0].text;
-chats[current].push({c:"ai",t:a});
-}catch(e){chats[current].push({c:"ai",t:"Pole, key bado haijawekwa au mtandao una shida."});}
-render();
-}else{
-chats[current].push({c:"ai",t:"Sawa, nimekupata!"});
-render();
+var ans=j.candidates&&j.candidates[0].content.parts[0].text||"Pole, key bado haijawekwa au mtandao una shida.";
+chats[current].push({c:"ai",t:ans});render();
+}catch(e){chats[current].push({c:"ai",t:"Pole, mtandao una shida."});render();}
 }
-}
-document.getElementById("sendBtn").onclick=send;
-</script>
-</body>
-</html>
+</script></body></html>
