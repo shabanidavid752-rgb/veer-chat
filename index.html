@@ -33,7 +33,11 @@ button{padding:10px 15px;border-radius:20px;border:none;background:#075e54;color
 </div>
 
 <script>
-var API_KEY=" ";
+var API_KEY = localStorage.getItem("VEER_KEY") || "";
+if(!API_KEY){
+API_KEY = prompt("Weka Gemini API Key yako:");
+localStorage.setItem("VEER_KEY", API_KEY);
+}
 var currentKey="ai";
 var chats={ai:[],general:[],friends:[]};
 
