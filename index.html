@@ -1,70 +1,83 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VEER - WhatsApp Style</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VEER</title>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:sans-serif;background:#efe9e3}
-.top{background:#075e54;color:white;padding:10px;display:flex;align-items:center;gap:10px}
-.top img{width:40px;height:40px;border-radius:50%;object-fit:cover}
-.tabs{display:flex;background:#075e54;color:white} .tabs div{flex:1;text-align:center;padding:12px} .tabs .on{border-bottom:3px solid white;font-weight:bold}
+*{box-sizing:border-box} body{margin:0;font-family:sans-serif;background:#efe9e3;padding-bottom:70px}
+.top{background:#075e54;color:white;padding:10px;display:flex;align-items:center;gap:10px} .top img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.tabs{display:flex;background:#075e54;color:white} .tabs div{flex:1;text-align:center;padding:13px;font-size:15px} .tabs .on{border-bottom:3px solid white;font-weight:bold}
 .page{display:none} .page.on{display:block}
-.chatItem{display:flex;gap:10px;background:white;padding:12px;border-bottom:1px solid #eee;align-items:center} .chatItem img{width:50px;height:50px;border-radius:50%;object-fit:cover;background:#ddd}
-.bubble{padding:9px 12px;border-radius:12px;margin:8px;max-width:80%;font-size:15px;position:relative} .me{background:#dcf8c6;margin-left:auto} .other{background:white}
-.time{font-size:10px;color:gray;text-align:right}
+.item{display:flex;gap:12px;background:white;padding:12px;border-bottom:1px solid #eee;align-items:center} .item img{width:50px;height:50px;border-radius:50%;object-fit:cover;background:#ddd}
+/* ICON YA VEER AI KAMA META AI */
+.veerIcon{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#00aaff,#ff00cc,#ffcc00);display:flex;align-items:center;justify-content:center;font-size:26px;color:white;flex-shrink:0;box-shadow:0 2px 6px #aaa}
+.veerTopIcon{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#00aaff,#a855f7,#ec4899,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:22px;color:white}
 .chatHead{background:#075e54;color:white;display:flex;align-items:center;gap:10px;padding:8px} .chatHead img{width:38px;height:38px;border-radius:50%}
-.inputBar{position:fixed;bottom:0;left:0;right:0;background:#efe9e3;padding:8px;display:flex;gap:6px;align-items:center} .inputBar input{flex:1;padding:12px;border-radius:25px;border:none;outline:none} .mic{width:48px;height:48px;border-radius:50%;background:#00a884;color:white;border:none;font-size:20px}
+.bubble{padding:9px 12px;border-radius:12px;margin:8px;max-width:82%;font-size:15px} .me{background:#dcf8c6;margin-left:auto} .other{background:white}
+.inputBar{position:fixed;bottom:68px;left:0;right:0;background:#efe9e3;padding:8px;display:flex;gap:6px} .inputBar input{flex:1;padding:12px;border-radius:25px;border:none;outline:none}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;border-top:1px solid #eee;padding:6px 0} .bottom div{flex:1;text-align:center;font-size:12px;color:gray} .bottom .on{color:#25D366;font-weight:bold}
+.fab{position:fixed;right:16px;bottom:140px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#00aaff,#a855f7,#ec4899);display:flex;align-items:center;justify-content:center;font-size:26px;color:white;z-index:11;box-shadow:0 2px 8px #888}
+.fab2{position:fixed;right:16px;bottom:78px;width:56px;height:56px;border-radius:14px;background:#00a884;color:white;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:11}
 .card{background:white;margin:10px;padding:12px;border-radius:12px} button{padding:10px 14px;border:none;border-radius:10px;background:#00a884;color:white} input{width:95%;padding:11px;border-radius:10px;border:1px solid #ddd;margin:5px 0} video{width:100%;border-radius:12px;background:black}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:4px} .grid div{height:120px;background:#ccc;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4px} .grid div{height:110px;background:#ddd;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:28px}
 </style></head>
 <body>
-<div class="top"><img src="https://i.pravatar.cc/100?img=12"><b>VEER</b><span style="margin-left:auto">🔍 ⋮</span></div>
-<div class="tabs"><div class="on" onclick="tab('chats',this)">CHATS</div><div onclick="tab('contacts',this)">CONTACTS</div><div onclick="tab('calls',this)">CALLS</div><div onclick="tab('media',this)">MEDIA</div></div>
+<div class="top"><img src="https://i.pravatar.cc/100?img=12"><b>VEER</b><span style="margin-left:auto;display:flex;gap:8px;align-items:center"><div class="veerTopIcon" onclick="openVeerAI()">✨</div>🔍 ⋮</span></div>
+<div class="tabs"><div class="on" onclick="tab2('chats',this)">CHATS</div><div onclick="tab2('contacts',this)">CONTACTS</div><div onclick="tab2('calls',this)">CALLS</div><div onclick="tab2('media',this)">MEDIA</div></div>
 
-<!-- CHATS LIST -->
-<div id="chats" class="page on"><div id="chatList"></div>
-<div class="card"><b>Ongeza Chat Mpya</b><input id="newName" placeholder="Jina e.g Lovely mom"><button onclick="newChat()">Anzisha Chat</button></div></div>
+<!-- CHATS -->
+<div id="chats" class="page on">
+<!-- VEER AI YUPO HAPA JUU KABISA KAMA META AI -->
+<div class="item" onclick="openVeerAI()" style="background:#f0f8ff">
+<div class="veerIcon">✨</div>
+<div style="flex:1"><b>VEER AI ✨</b><div style="color:#075e54;font-size:13px">Ask VEER AI anything...</div></div><span style="color:green;font-size:11px">online</span>
+</div>
+<div id="chatList"></div>
+<div class="card"><b>Ongeza Chat Mpya</b><input id="newName" placeholder="Jina e.g Lovely mom"><button onclick="newChat()">Anzisha Chat</button></div>
+</div>
 
-<!-- CHAT WINDOW -->
+<!-- CHAT WINDOW YA MTU -->
 <div id="chatWin" class="page">
-<div class="chatHead"><span onclick="back()">←</span><img id="chatPic" src="https://i.pravatar.cc/100?img=12"><div><b id="chatName">Lovely mom</b><div style="font-size:11px">online</div></div><span style="margin-left:auto">📹 📞</span></div>
-<div id="msgs" style="padding-bottom:80px"></div>
-<div class="inputBar"><input id="msgInput" placeholder="Message"><button onclick="attach()">📎</button><button onclick="sendPic()">📷</button><button class="mic" id="micBtn" onclick="voice()">🎤</button><button onclick="sendMsg()" style="background:#00a884;color:white;border:none;padding:10px;border-radius:50%">➤</button></div>
+<div class="chatHead"><span onclick="back()">←</span><img id="chatPic" src="https://i.pravatar.cc/100?img=32"><div><b id="chatName">Lovely mom</b><div style="font-size:11px">online</div></div><span style="margin-left:auto">📹 📞</span></div>
+<div id="msgs"></div>
+<div class="inputBar"><input id="msgInput" placeholder="Message"><button onclick="alert('Chagua faili')">📎</button><button onclick="alert('Camera')">📷</button><button onclick="sendMsg()" style="background:#00a884;color:white;border:none;border-radius:50%;width:44px">➤</button></div>
+</div>
+
+<!-- VEER AI CHAT WINDOW -->
+<div id="veerWin" class="page">
+<div class="chatHead"><span onclick="back()">←</span><div class="veerIcon" style="width:38px;height:38px;font-size:18px">✨</div><div><b>VEER AI ✨</b><div style="font-size:11px">Always online • AI Assistant</div></div><span style="margin-left:auto">📹 📞</span></div>
+<div id="aiMsgs" style="padding:10px;padding-bottom:90px"><div class="bubble other">Habari! Mimi ni <b>VEER AI ✨</b><br>Niulize chochote — nitakujibu kama Meta AI!</div></div>
+<div class="inputBar"><input id="q" placeholder="Ask VEER AI..."><button onclick="askAI()" style="background:#00a884;color:white;border:none;border-radius:50%;width:44px">➤</button></div>
 </div>
 
 <!-- CONTACTS -->
-<div id="contacts" class="page">
-<div class="card"><b>New community</b><br><b>New event</b></div>
-<div class="card"><b>Ongeza Contact</b><input id="cName" placeholder="Jina"><input id="cNum" placeholder="Namba"><button onclick="addC()">Hifadhi</button></div>
-<div id="cList"></div>
-<div class="card">Invite to VEER<br><small>Watu wasio na VEER wataalikwa</small></div>
-</div>
+<div id="contacts" class="page"><div class="card"><b>Ongeza Contact</b><input id="cName" placeholder="Jina"><input id="cNum" placeholder="Namba"><button onclick="addC()">Hifadhi</button></div><div id="cList"></div></div>
 
 <!-- CALLS -->
-<div id="calls" class="page"><div class="card"><b>Video Call - VEER</b><p>ID yako: <b id="myId">Inatengenezwa...</b></p><input id="peerId" placeholder="Weka ID ya mwenzako"><button onclick="callPeer()">📹 Piga Video Call</button><video id="myV" autoplay muted playsinline></video><video id="otherV" autoplay playsinline></video></div>
-<div class="card"><b>VEER AI</b><input id="q" placeholder="Uliza VEER..."><button onclick="askAI()">Tuma kwa VEER AI</button><div id="aiAns"></div></div></div>
+<div id="calls" class="page"><div class="card"><b>Video Call</b><p>ID yako: <b id="myId">Inatengenezwa...</b></p><input id="peerId" placeholder="Weka ID ya mwenzako"><button onclick="callPeer()">📹 Piga Video Call</button><video id="myV" autoplay muted playsinline></video><video id="otherV" autoplay playsinline></video></div></div>
 
 <!-- MEDIA -->
-<div id="media" class="page"><div class="card"><b>Tuma Video HD</b><input type="file" id="vf" accept="video/*"><button onclick="sendVideo()">Tuma Video HD</button><div id="vList"></div></div>
-<div class="card"><b>Voice Mail</b><button onclick="recVoice()" id="recBtn">🎤 Rekodi Voice Mail</button><div id="voiceList"></div></div></div>
+<div id="media" class="page"><div class="card"><b>Tuma Video HD</b><input type="file" id="vf" accept="video/*"><button onclick="sendVideo()">Tuma Video HD</button><div id="vList"></div></div><div class="card"><b>Voice Mail</b><button onclick="recVoice()" id="recBtn">🎤 Rekodi Voice</button><div id="voiceList"></div></div></div>
+
+<div class="fab" onclick="openVeerAI()">✨</div>
+<div class="fab2" onclick="newChatFloat()">+</div>
+
+<div class="bottom"><div class="on" onclick="nav2('chats',this)">💬<br>Chats</div><div onclick="nav2('updates',this)">◎<br>Updates</div><div onclick="nav2('communities',this)">👥<br>Communities</div><div onclick="nav2('calls',this)">📞<br>Calls</div></div>
 
 <script>
 let chats=[{name:"Lovely mom",last:"Wanataka uwaletee malta",img:"https://i.pravatar.cc/100?img=32"},{name:"Zai",last:"Sawa",img:"https://i.pravatar.cc/100?img=5"},{name:"Benzema",last:"Xaw",img:"https://i.pravatar.cc/100?img=13"}];
-let msgsData={};
-function renderChats(){document.getElementById("chatList").innerHTML=chats.map((c,i)=>`<div class="chatItem" onclick="openChat(${i})"><img src="${c.img}"><div style="flex:1"><b>${c.name}</b><div style="color:gray;font-size:13px">${c.last}</div></div><span style="color:green;font-size:11px">9:25 PM</span></div>`).join("")} renderChats();
-let cur=0;function openChat(i){cur=i;document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById("chatWin").classList.add('on');document.getElementById("chatName").innerText=chats[i].name;document.getElementById("chatPic").src=chats[i].img;renderMsgs();}
-function back(){document.getElementById("chatWin").classList.remove('on');document.getElementById("chats").classList.add('on');}
-function renderMsgs(){let m=msgsData[cur]||[{t:"Wanataka uwaletee malta",me:false},{t:"Wanywe maji waache ujinga!",me:true},{t:"Akimaliza kulia alale!",me:false}];document.getElementById("msgs").innerHTML=m.map(x=>`<div class="bubble ${x.me?'me':'other'}">${x.t}<div class="time">9:25 PM ✓✓</div></div>`).join("")}
-function sendMsg(){let v=document.getElementById("msgInput").value;if(!v)return;if(!msgsData[cur])msgsData[cur]=[];msgsData[cur].push({t:v,me:true});document.getElementById("msgInput").value="";renderMsgs();setTimeout(()=>{msgsData[cur].push({t:"Sawa, nimepokea ❤️",me:false});renderMsgs();},1000);}
+let msgsData={}; let cur=0;
+function renderChats(){document.getElementById("chatList").innerHTML=chats.map((c,i)=>`<div class="item" onclick="openChat(${i})"><img src="${c.img}"><div style="flex:1"><b>${c.name}</b><div style="color:gray;font-size:13px">${c.last}</div></div><span style="font-size:11px;color:green">9:25 PM</span></div>`).join("")} renderChats();
+function openChat(i){cur=i;document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById("chatWin").classList.add('on');document.getElementById("chatName").innerText=chats[i].name;document.getElementById("chatPic").src=chats[i].img;renderMsgs();}
+function openVeerAI(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById("veerWin").classList.add('on');}
+function back(){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById("chats").classList.add('on');}
+function renderMsgs(){let m=msgsData[cur]||[{t:"Wanataka uwaletee malta",me:false},{t:"Wanywe maji waache ujinga!",me:true}];document.getElementById("msgs").innerHTML=m.map(x=>`<div class="bubble ${x.me?'me':'other'}">${x.t}<div style="font-size:10px;color:gray;text-align:right">9:25 PM ✓✓</div></div>`).join("")}
+function sendMsg(){let v=document.getElementById("msgInput").value;if(!v)return;if(!msgsData[cur])msgsData[cur]=[];msgsData[cur].push({t:v,me:true});document.getElementById("msgInput").value="";renderMsgs();}
 function newChat(){let n=document.getElementById("newName").value;if(!n)return;chats.unshift({name:n,last:"Anzisha mazungumzo",img:"https://i.pravatar.cc/100?img="+Math.floor(Math.random()*70)});renderChats();openChat(0);}
-function tab(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');document.querySelectorAll('.tabs div').forEach(d=>d.classList.remove('on'));el.classList.add('on');}
-let contacts=JSON.parse(localStorage.getItem("VEER_C")||"[]");function renderC(){document.getElementById("cList").innerHTML=contacts.map(c=>`<div class="chatItem"><img src="https://i.pravatar.cc/100?img=20"><div style="flex:1"><b>${c.n}</b><div>${c.num}</div></div><button>Invite</button></div>`).join("")} renderC();
-function addC(){contacts.push({n:document.getElementById("cName").value,num:document.getElementById("cNum").value});localStorage.setItem("VEER_C",JSON.stringify(contacts));renderC();alert("Contact imehifadhiwa")}
+function newChatFloat(){let n=prompt("Jina la mtu?");if(!n)return;chats.unshift({name:n,last:"Anzisha mazungumzo",img:"https://i.pravatar.cc/100?img=20"});renderChats();openChat(0);}
+function tab2(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');document.querySelectorAll('.tabs div').forEach(d=>d.classList.remove('on'));el.classList.add('on');}
+function nav2(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id==='updates'?'chats':id).classList.add('on');document.querySelectorAll('.bottom div').forEach(d=>d.classList.remove('on'));el.classList.add('on');}
+let contacts=JSON.parse(localStorage.getItem("VEER_C")||"[]");function renderC(){document.getElementById("cList").innerHTML=contacts.map(c=>`<div class="item"><img src="https://i.pravatar.cc/100?img=20"><div style="flex:1"><b>${c.n}</b><div>${c.num}</div></div><button>Invite</button></div>`).join("")} renderC();
+function addC(){contacts.push({n:document.getElementById("cName").value,num:document.getElementById("cNum").value});localStorage.setItem("VEER_C",JSON.stringify(contacts));renderC();}
 let KEY=localStorage.getItem("VEER_KEY")||prompt("Weka Gemini API Key");if(KEY)localStorage.setItem("VEER_KEY",KEY);
-async function askAI(){let q=document.getElementById("q").value;let r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+KEY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:q}]}]})});let d=await r.json();document.getElementById("aiAns").innerHTML=d.candidates?d.candidates[0].content.parts[0].text:"Jaribu tena";}
+async function askAI(){let q=document.getElementById("q").value;if(!q)return;document.getElementById("aiMsgs").innerHTML+=`<div class="bubble me">${q}</div>`;document.getElementById("q").value="";document.getElementById("aiMsgs").innerHTML+=`<div class="bubble other" id="typing">VEER AI anaandika... ✨</div>`;let r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+KEY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:q}]}]})});let d=await r.json();let ans=d.candidates?d.candidates[0].content.parts[0].text:"Jaribu tena";document.getElementById("typing").remove();document.getElementById("aiMsgs").innerHTML+=`<div class="bubble other"><b>VEER AI ✨</b><br>${ans}</div>`;}
 let peer=new Peer();peer.on('open',id=>document.getElementById("myId").innerText=id);peer.on('call',call=>{navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(s=>{document.getElementById("myV").srcObject=s;call.answer(s);call.on('stream',rs=>document.getElementById("otherV").srcObject=rs);});});
-async function callPeer(){let s=await navigator.mediaDevices.getUserMedia({video:true,audio:true});document.getElementById("myV").srcObject=s;let c=peer.call(document.getElementById("peerId").value,s);c.on('stream',rs=>document.getElementById("otherV").srcObject=rs);}
-function sendVideo(){let f=document.getElementById("vf").files[0];if(!f)return;let u=URL.createObjectURL(f);document.getElementById("vList").innerHTML+=`<div class="grid"><div>▶️</div><div>📷</div><div>📷</div><div>+9</div></div><video controls src="${u}"></video>`;}
-function attach(){alert("Chagua picha / faili kutoka simu yako")}
-function sendPic(){alert("Camera itafunguka - chagua picha")}
-let rec,chunks=[];async function voice(){let b=document.getElementById("micBtn");if(!rec||rec.state=="inactive"){let s=await navigator.mediaDevices.getUserMedia({audio:true});rec=new MediaRecorder(s);chunks=[];rec.ondataavailable=e=>chunks.push(e.data);rec.onstop=()=>{let url=URL.createObjectURL(new Blob(chunks,{type:'audio/webm'}));document.getElementById("msgs").innerHTML+=`<div class="bubble me"><audio controls src="${url}"></audio><div class="time">Voice Mail ✓✓</div></div>`;};rec.start();b.innerText="⏹";}else{rec.stop();b.innerText="🎤";}}
-async function recVoice(){await voice();alert("Voice Mail imetumwa kwenye chat!")}
-</script></body></html>
+async function callPeer(){let s=await navigator.mediaDevices.getUserMedia({video:true
