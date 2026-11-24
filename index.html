@@ -1,79 +1,53 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VEER AI</title>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VEER SUPER APP</title>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
-body{font-family:sans-serif;background:#0f172a;color:white;margin:0;display:flex;flex-direction:column;height:100vh}
-header{background:#1e293b;padding:15px;text-align:center;font-weight:bold;font-size:20px}
-header button{background:red;color:white;border:none;padding:6px 10px;border-radius:5px;margin-left:5px}
-#chat{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px}
-.msg{padding:10px 14px;border-radius:12px;max-width:85%}
-.user{background:#2563eb;align-self:flex-end}
-.ai{background:#334155;align-self:flex-start}
-#box{display:flex;padding:10px;background:#1e293b;gap:8px}
-input{flex:1;padding:12px;border-radius:10px;border:none;outline:none}
-#send{background:#2563eb;color:white;border:none;padding:12px 18px;border-radius:10px}
-</style>
-</head>
+body{font-family:sans-serif;background:#0f172a;color:white;margin:0}
+header{background:#1e293b;padding:12px;text-align:center;font-weight:bold;font-size:20px}
+nav{display:flex;background:#1e293b} nav button{flex:1;padding:12px;background:none;color:white;border:none;border-bottom:3px solid transparent} nav button.active{border-color:#2563eb;background:#2563eb}
+.page{display:none;padding:12px} .page.active{display:block}
+.card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:10px}
+input,textarea{width:95%;padding:11px;border-radius:10px;border:none;margin:5px 0;outline:none}
+button{padding:11px 16px;border:none;border-radius:10px;background:#2563eb;color:white}
+.msg{padding:10px;border-radius:10px;margin:6px 0;max-width:90%} .user{background:#2563eb;margin-left:auto} .ai{background:#334155}
+video{width:100%;border-radius:12px;background:black} audio{width:100%}
+</style></head>
 <body>
-<header>VEER AI <button onclick="badilishaKey()">Badilisha Key</button> <button onclick="futaChat()" style="background:#475569">Futa Chat</button></header>
-<div id="chat"></div>
-<div id="box"><input id="input" placeholder="Andika hapa..."><button id="send" onclick="tuma()">Tuma</button></div>
+<header>VEER SUPER APP</header>
+<nav>
+<button class="active" onclick="show('chat',this)">Chatting</button>
+<button onclick="show('contacts',this)">Contacts</button>
+<button onclick="show('call',this)">Video Call</button>
+<button onclick="show('media',this)">Video HD / Voice</button>
+</nav>
+<div id="chat" class="page active">
+<div class="card"><b>VEER AI Chat</b><div id="chatBox"></div><input id="q" placeholder="Andika hapa..."><button onclick="tumaAI()">Tuma</button></div>
+<div class="card"><b>Chat na Mtu</b><input id="mtu" placeholder="Jina la mtu"><input id="ujumbeMtu" placeholder="Ujumbe..."><button onclick="tumaMtu()">Tuma kwa mtu</button><div id="chatMtu"></div></div>
+</div>
+<div id="contacts" class="page">
+<div class="card"><b>Ongeza Contact</b><input id="jina" placeholder="Jina"><input id="namba" placeholder="Namba e.g 077..."><button onclick="ongezaContact()">Hifadhi Contact</button></div>
+<div id="listContact"></div>
+</div>
+<div id="call" class="page">
+<div class="card"><b>Video Call</b><p>ID yako: <b id="myId">Inatengenezwa...</b></p><input id="peerId" placeholder="Weka ID ya mwenzako"><button onclick="pigaSimu()">Piga Video Call</button><button onclick="kataSimu()" style="background:red">Kata</button><video id="myVideo" autoplay muted playsinline></video><video id="otherVideo" autoplay playsinline></video></div>
+</div>
+<div id="media" class="page">
+<div class="card"><b>Tuma Video HD</b><input type="file" id="videoFile" accept="video/*"><button onclick="tumaVideo()">Tuma Video HD</button><div id="videoList"></div></div>
+<div class="card"><b>Voice Mail</b><button id="recBtn" onclick="rekodi()">Anza Kurekodi Voice</button><div id="voiceList"></div></div>
+</div>
 <script>
-let KEY = localStorage.getItem("VEER_KEY");
-if(!KEY || KEY.length < 10){
-  KEY = prompt("Weka Gemini API Key yako:");
-  if(KEY) localStorage.setItem("VEER_KEY", KEY.trim());
-}
-function badilishaKey(){ localStorage.removeItem("VEER_KEY"); location.reload(); }
-function futaChat(){ localStorage.removeItem("VEER_CHATS"); document.getElementById("chat").innerHTML=""; }
-
-// Pakia chats za zamani
-let saved = JSON.parse(localStorage.getItem("VEER_CHATS") || "[]");
-saved.forEach(c => ongeza(c.text, c.type, false));
-
-function ongeza(text, aina, hifadhi=true){
-  let d = document.createElement("div");
-  d.className = "msg " + aina;
-  d.innerText = text;
-  document.getElementById("chat").appendChild(d);
-  document.getElementById("chat").scrollTop = 99999;
-  if(hifadhi){
-    saved.push({text, type: aina});
-    localStorage.setItem("VEER_CHATS", JSON.stringify(saved));
-  }
-  return d;
-}
-async function tuma(){
-  async function tuma(){
-  let inp = document.getElementById("input");
-  let swali = inp.value.trim();
-  if(!swali) return;
-  ongeza(swali, "user");
-  inp.value = "";
-  let loading = ongeza("VEER anaandika...", "ai", false);
-  let models = ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-1.5-flash"];
-  let jibu = null;
-  for(let m of models){
-    try{
-      let res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent?key=" + KEY, {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({contents:[{parts:[{text: swali}]}]})
-      });
-      let data = await res.json();
-      if(data.candidates){
-        jibu = data.candidates[0].content.parts[0].text;
-        break;
-      }
-    }catch(e){}
-  }
-  loading.remove();
-  if(jibu) ongeza(jibu, "ai");
-  else ongeza("Pole, Google wamejaa sana sasa hivi. Jaribu tena baada ya sekunde 30.", "ai");
-}
-</script>
-</body>
-</html>
+function show(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active')}
+let KEY = localStorage.getItem("VEER_KEY") || prompt("Weka Gemini API Key:");
+if(KEY) localStorage.setItem("VEER_KEY",KEY);
+async function tumaAI(){let q=document.getElementById("q").value;if(!q)return;let box=document.getElementById("chatBox");box.innerHTML+=`<div class="msg user">${q}</div>`;document.getElementById("q").value="";let res=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+KEY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:q}]}]})});let d=await res.json();let j=d.candidates?d.candidates[0].content.parts[0].text:"Google wamejaa, jaribu tena";box.innerHTML+=`<div class="msg ai">${j}</div>`;}
+function tumaMtu(){let m=document.getElementById("mtu").value;let u=document.getElementById("ujumbeMtu").value;document.getElementById("chatMtu").innerHTML+=`<div class="card"><b>${m}:</b> ${u}</div>`;}
+let contacts=JSON.parse(localStorage.getItem("VEER_CONTACTS")||"[]");function renderC(){document.getElementById("listContact").innerHTML=contacts.map((c,i)=>`<div class="card"><b>${c.jina}</b><br>${c.namba}<br><a href="tel:${c.namba}"><button>Piga Simu</button></a> <a href="https://wa.me/${c.namba}"><button style="background:green">WhatsApp</button></a></div>`).join("");} renderC();
+function ongezaContact(){contacts.push({jina:document.getElementById("jina").value,namba:document.getElementById("namba").value});localStorage.setItem("VEER_CONTACTS",JSON.stringify(contacts));renderC();alert("Contact imehifadhiwa!")}
+let peer=new Peer();let currentCall=null;peer.on('open',id=>document.getElementById("myId").innerText=id);
+peer.on('call',call=>{navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(s=>{document.getElementById("myVideo").srcObject=s;call.answer(s);call.on('stream',rs=>document.getElementById("otherVideo").srcObject=rs);currentCall=call;});});
+async function pigaSimu(){let s=await navigator.mediaDevices.getUserMedia({video:true,audio:true});document.getElementById("myVideo").srcObject=s;let call=peer.call(document.getElementById("peerId").value,s);call.on('stream',rs=>document.getElementById("otherVideo").srcObject=rs);currentCall=call;}
+function kataSimu(){if(currentCall)currentCall.close();alert("Simu imekatwa")}
+function tumaVideo(){let f=document.getElementById("videoFile").files[0];if(!f)return alert("Chagua video kwanza");let url=URL.createObjectURL(f);document.getElementById("videoList").innerHTML+=`<div class="card"><b>Video HD - ${f.name}</b><video controls src="${url}"></video></div>`;alert("Video HD imetumwa!")}
+let recorder, chunks=[];async function rekodi(){let btn=document.getElementById("recBtn");if(!recorder||recorder.state==="inactive"){let s=await navigator.mediaDevices.getUserMedia({audio:true});recorder=new MediaRecorder(s);chunks=[];recorder.ondataavailable=e=>chunks.push(e.data);recorder.onstop=()=>{let blob=new Blob(chunks,{type:'audio/webm'});let url=URL.createObjectURL(blob);document.getElementById("voiceList").innerHTML+=`<div class="card"><b>Voice Mail Mpya</b><audio controls src="${url}"></audio></div>`;};recorder.start();btn.innerText="Simamisha & Tuma Voice";}else{recorder.stop();btn.innerText="Anza Kurekodi Voice";}}
+</script></body></html>
